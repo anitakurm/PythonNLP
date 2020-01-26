@@ -1,0 +1,193 @@
+---
+title: "Classifier performance: before and after feature selection"
+author: "Anita"
+date: "12/8/2019"
+output: html_document
+---
+
+```{r}
+pacman::p_load(viridis, tidyverse)
+
+data = read.csv("classifier_performances.csv")
+data_long <- gather(data, Measure, Score, Precision, Recall, Accuracy.balanced, F1.weighted, factor_key=TRUE)
+
+
+#best classifiers in every score
+best_classifiers = data_long %>% 
+  group_by(Measure) %>% 
+  filter(Score %in% tail(sort(Score),2)) %>% 
+  group_by(Classifier) %>% 
+  summarise(times_in_2_top_scores = n()) %>% 
+  arrange(desc(times_in_2_top_scores))
+
+best_classifiers_for_vis = data_long %>% 
+  group_by(Measure) %>% 
+  filter(Score %in% tail(sort(Score),2))
+
+
+ggplot(best_classifiers_for_vis, aes(Classifier, fill =Classifier))+
+  geom_histogram(aes(color = Classifier), stat = 'count')+
+  scale_fill_viridis(discrete = TRUE, option = "A", begin = 0.4, end=0.75)+
+  scale_color_viridis(discrete = TRUE, option = "A",begin = 0.4, end=0.75)+
+  theme_minimal()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))+
+  ylab("Number of times in top 2")+
+  ggtitle("Number of times classifiers were in top 2 of any of the performance scores")
+  
+
+
+data_long$Measure = as.numeric(data_long$Measure)
+# Discrete color. use the argument discrete = TRUE
+ggplot(data_long, aes(Measure, Score, fill = Classifier))+
+  geom_area(aes(color = Classifier, alpha = 0.001), position = 'identity')+
+  scale_fill_viridis(discrete = TRUE, option = "A")+
+  scale_color_viridis(discrete = TRUE, option = "A")+
+  ylim(0, 1)+
+  xlim(1,4)+
+  scale_x_continuous(breaks=c(1,2,3,4), labels=c("Precision", "Recall", "Accuracy (b)", "F1 weighted"))+
+  theme_minimal()+
+  ggtitle("Different metrics of performance of all classifiers on all features")
+  
+
+max_all <- max(data$Accuracy.balanced)
+```
+
+
+Selected features: Lasso
+```{r}
+data = read.csv("lasso_features_performances.csv")
+data_long <- gather(data, Measure, Score, Precision, Recall, Accuracy.balanced, F1.weighted, factor_key=TRUE)
+
+
+#best classifiers in every score
+best_classifiers = data_long %>% 
+  group_by(Measure) %>% 
+  filter(Score %in% tail(sort(Score),2)) %>% 
+  group_by(Classifier) %>% 
+  summarise(times_in_2_top_scores = n()) %>% 
+  arrange(desc(times_in_2_top_scores))
+
+best_classifiers_for_vis = data_long %>% 
+  group_by(Measure) %>% 
+  filter(Score %in% tail(sort(Score),2))
+
+
+ggplot(best_classifiers_for_vis, aes(Classifier, fill =Classifier))+
+  geom_histogram(aes(color = Classifier), stat = 'count')+
+  scale_fill_viridis(discrete = TRUE, option = "A", begin = 0.4, end=0.75)+
+  scale_color_viridis(discrete = TRUE, option = "A",begin = 0.4, end=0.75)+
+  theme_minimal()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))+
+  ylab("Number of times in top 2")+
+  ggtitle("Number of times classifiers were in top 2 of any of the performance scores
+          Lasso selection")
+  
+
+
+data_long$Measure = as.numeric(data_long$Measure)
+# Discrete color. use the argument discrete = TRUE
+ggplot(data_long, aes(Measure, Score, fill = Classifier))+
+  geom_area(aes(color = Classifier, alpha = 0.001), position = 'identity')+
+  scale_fill_viridis(discrete = TRUE, option = "A")+
+  scale_color_viridis(discrete = TRUE, option = "A")+
+  ylim(0, 1)+
+  xlim(1,4)+
+  scale_x_continuous(breaks=c(1,2,3,4), labels=c("Precision", "Recall", "Accuracy (b)", "F1 weighted"))+
+  theme_minimal()+
+  ggtitle("Different metrics of performance of all classifiers on Lasso selected features")
+
+max_lasso = max(data$Accuracy.balanced)
+```
+
+Selected features: Logistic regression
+```{r}
+data = read.csv("logistic_features_performances.csv")
+data_long <- gather(data, Measure, Score, Precision, Recall, Accuracy.balanced, F1.weighted, factor_key=TRUE)
+
+
+#best classifiers in every score
+best_classifiers = data_long %>% 
+  group_by(Measure) %>% 
+  filter(Score %in% tail(sort(Score),2)) %>% 
+  group_by(Classifier) %>% 
+  summarise(times_in_2_top_scores = n()) %>% 
+  arrange(desc(times_in_2_top_scores))
+
+best_classifiers_for_vis = data_long %>% 
+  group_by(Measure) %>% 
+  filter(Score %in% tail(sort(Score),2))
+
+
+ggplot(best_classifiers_for_vis, aes(Classifier, fill =Classifier))+
+  geom_histogram(aes(color = Classifier), stat = 'count')+
+  scale_fill_viridis(discrete = TRUE, option = "A", begin = 0.4, end=0.75)+
+  scale_color_viridis(discrete = TRUE, option = "A",begin = 0.4, end=0.75)+
+  theme_minimal()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))+
+  ylab("Number of times in top 2")+
+  ggtitle("Number of times classifiers were in top 2 of any of the performance scores
+          Logistic Regression selection")
+  
+
+
+data_long$Measure = as.numeric(data_long$Measure)
+# Discrete color. use the argument discrete = TRUE
+ggplot(data_long, aes(Measure, Score, fill = Classifier))+
+  geom_area(aes(color = Classifier, alpha = 0.001), position = 'identity')+
+  scale_fill_viridis(discrete = TRUE, option = "A")+
+  scale_color_viridis(discrete = TRUE, option = "A")+
+  ylim(0, 1)+
+  xlim(1,4)+
+  scale_x_continuous(breaks=c(1,2,3,4), labels=c("Precision", "Recall", "Accuracy (b)", "F1 weighted"))+
+  theme_minimal()+
+  ggtitle("Different metrics of performance of all classifiers on Logistic Regression features")
+
+max_lr = max(data$Accuracy.balanced)
+```
+
+
+Selected features: Linear SVC
+```{r}
+data = read.csv("linear_svc_features_performances.csv")
+data_long <- gather(data, Measure, Score, Precision, Recall, Accuracy.balanced, F1.weighted, factor_key=TRUE)
+
+
+#best classifiers in every score
+best_classifiers = data_long %>% 
+  group_by(Measure) %>% 
+  filter(Score %in% tail(sort(Score),2)) %>% 
+  group_by(Classifier) %>% 
+  summarise(times_in_2_top_scores = n()) %>% 
+  arrange(desc(times_in_2_top_scores))
+
+best_classifiers_for_vis = data_long %>% 
+  group_by(Measure) %>% 
+  filter(Score %in% tail(sort(Score),2))
+
+
+ggplot(best_classifiers_for_vis, aes(Classifier, fill =Classifier))+
+  geom_histogram(aes(color = Classifier), stat = 'count')+
+  scale_fill_viridis(discrete = TRUE, option = "A", begin = 0.4, end=0.75)+
+  scale_color_viridis(discrete = TRUE, option = "A",begin = 0.4, end=0.75)+
+  theme_minimal()+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))+
+  ylab("Number of times in top 2")+
+  ggtitle("Number of times classifiers were in top 2 of any of the performance scores
+          Linear SVC selection")
+  
+
+
+data_long$Measure = as.numeric(data_long$Measure)
+# Discrete color. use the argument discrete = TRUE
+ggplot(data_long, aes(Measure, Score, fill = Classifier))+
+  geom_area(aes(color = Classifier, alpha = 0.001), position = 'identity')+
+  scale_fill_viridis(discrete = TRUE, option = "A")+
+  scale_color_viridis(discrete = TRUE, option = "A")+
+  ylim(0, 1)+
+  xlim(1,4)+
+  scale_x_continuous(breaks=c(1,2,3,4), labels=c("Precision", "Recall", "Accuracy (b)", "F1 weighted"))+
+  theme_minimal()+
+  ggtitle("Different metrics of performance of all classifiers on Linear SVC selected features")
+
+max_lasso = max(data$Accuracy.balanced)
+```

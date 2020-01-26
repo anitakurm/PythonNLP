@@ -1,0 +1,31 @@
+---
+title: "postersessions_plots"
+author: "Maria Abildtrup Madsen"
+date: "12/8/2019"
+output: html_document
+---
+
+```{r}
+library(tidyr)
+library(ggplot2)
+
+data = read.csv("/Users/mariaa.madsen/Google Drive/NLP Anita and Maria/Data/relevant_features.csv")
+names(data)[1] <- "Features"
+```
+
+```{r}
+data_long <- gather(data, Measure, Score, accuracy_balanced:f1_weighted, factor_key=TRUE)
+data_long
+
+data_long$Features = gsub('score_', '',data_long$Features)
+
+# Change the colors manually
+p <- ggplot(data=data_long, aes(x=Features, y=Score, fill=Measure)) +
+geom_bar(stat="identity", color="black", position=position_dodge())+
+  theme_minimal()
+
+# Use custom colors
+p + scale_fill_manual(values=c('#999999','#E69F00'))
+# Use brewer color palettes
+p + scale_fill_brewer(palette="Blues")
+```

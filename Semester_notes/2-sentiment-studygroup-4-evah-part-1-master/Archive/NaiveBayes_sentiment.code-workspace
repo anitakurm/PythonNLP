@@ -1,0 +1,27 @@
+{
+    "folders": [
+		{
+			"name": "2-sentiment-studygroup-4-evah-part-1",
+			"uri": "vsls:/"
+		}
+	],
+    "settings": {
+        "vsliveshare.join.reload.workspaceId": "FF8D4FAFEA9C735737F666A45AF0C355B8F5",
+        "vsliveshare.join.reload.workspaceFolder": "/var/folders/kv/vb677831009bk406w7jnmhcw0000gp/T/vsliveshare/tmp-FF8D4FAFEA9C735737F666A45AF0C355B8F5",
+        "files.hotExit": "off",
+        "extensions.ignoreRecommendations": true,
+        "editor.detectIndentation": true,
+        "editor.formatOnSave": false,
+        "files.autoSave": "off",
+        "files.trimTrailingWhitespace": false,
+        "files.insertFinalNewline": false,
+        "files.trimFinalNewlines": false,
+        "typescript.tsc.autoDetect": "off",
+        "jake.autoDetect": "off",
+        "grunt.autoDetect": "off",
+        "gulp.autoDetect": "off",
+        "npm.autoDetect": "off",
+        "debug.allowBreakpointsEverywhere": true,
+        "html.autoClosingTags": false
+    }
+}
